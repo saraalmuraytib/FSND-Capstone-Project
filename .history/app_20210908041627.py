@@ -150,8 +150,6 @@ def get_appointments_student(student_id):
               'Upcoming Appointments': upcoming_appointments
           })
 
-#-------------------- POST Requests --------------------
-
 
 
   

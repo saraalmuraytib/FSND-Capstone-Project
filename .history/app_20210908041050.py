@@ -84,8 +84,8 @@ def get_tutors_based_on_subject(subject_id):
 
 @app.route('/tutor/<int:tutor_id>/appointments', methods=['GET'])
 def get_appointments_tutor(tutor_id):
-    tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
 
+    tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
     if tutor is None:
          abort(404)
     else:
@@ -115,42 +115,6 @@ def get_appointments_tutor(tutor_id):
               'Total of Upcoming Appointments': tutor.num_upcoming_appointments,
               'Upcoming Appointments': upcoming_appointments
           })
-
-@app.route('/student/<int:student_id>/appointments', methods=['GET'])
-def get_appointments_student(student_id):
-    student = Student.query.filter(Student.id == student_id).one_or_none()
-
-    if student is None:
-         abort(404)
-    else:
-         appointments = Appointments.query.filter(
-             Appointments.student_id == str(student_id)).all()
-         if len(appointments) == 0:
-           return jsonify({
-               'success': True,
-               'Total Appointments': len(appointments)
-           })
-         else:
-          upcoming_appointments = []
-          for appointment in student.upcoming_appointments:
-              tutor = Tutor.query.get(appointment.tutor_id)
-
-              upcoming_appointments.append({
-                  'Appointment ID': appointment.id,
-                  "Tutor ID": appointment.student_id,
-                  "Tutor name": tutor.name,
-                  'Start Time': appointment.start_time,
-                  'Duration': appointment.duration,
-                'confirmation': "Confirmed" if appointment.confirmation in (True, 't', 'True') else "Not Confirmed"
-              })
-          return jsonify({
-              'success': True,
-              'Total Appointments': len(appointments),
-              'Total of Upcoming Appointments': student.num_upcoming_appointments,
-              'Upcoming Appointments': upcoming_appointments
-          })
-
-#-------------------- POST Requests --------------------
 
 
 

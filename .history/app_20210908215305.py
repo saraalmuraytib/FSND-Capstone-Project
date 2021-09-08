@@ -150,9 +150,7 @@ def get_appointments_student(student_id,payload):
             })
 
 # -------------------- POST Requests ---------------------
-#  It should require the 'post:create_tutor' permission
 @app.route('/tutor', methods=['POST'])
-@requires_auth('post:create_tutor')
 def create_tutor():
     body = request.get_json()
     name = body.get('name')
@@ -176,26 +174,6 @@ def create_tutor():
       except:
         abort(422)
 
-
-@app.route('/student', methods=['POST'])
-def create_student():
-
-    body = request.get_json()
-    name = body.get('name')
-    email = body.get('email')
-    age = body.get('age')
-    grade=body.get('grade')
-   
-    try:
-        new_student = Student(name=name, 
-        email=email,age=age,grade=grade)
-        new_student.insert()
-        return jsonify({
-            'success': True,
-            'Appointment': new_student.format()
-        })
-    except:
-        abort(422)
 
 
 #  It should require the 'post:create_appointment' permission

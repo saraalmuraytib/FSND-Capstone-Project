@@ -150,54 +150,6 @@ def get_appointments_student(student_id,payload):
             })
 
 # -------------------- POST Requests ---------------------
-#  It should require the 'post:create_tutor' permission
-@app.route('/tutor', methods=['POST'])
-@requires_auth('post:create_tutor')
-def create_tutor():
-    body = request.get_json()
-    name = body.get('name')
-    intro = body.get('intro')
-    subject_id = body.get('subject_id')
-    availableTime=body.get('availableTime')
-    # Check if the subject exist or not
-    subject = Subject.query.filter(Subject.id == subject_id).one_or_none()
-  
-    if subject is None:
-      abort(404)
-    else:
-      try:
-        new_tutor = Tutor(name=name, 
-        intro=intro,subject_id=subject_id,availableTime=availableTime)
-        new_tutor.insert()
-        return jsonify({
-            'success': True,
-            'Appointment': new_tutor.format()
-        })
-      except:
-        abort(422)
-
-
-@app.route('/student', methods=['POST'])
-def create_student():
-
-    body = request.get_json()
-    name = body.get('name')
-    email = body.get('email')
-    age = body.get('age')
-    grade=body.get('grade')
-   
-    try:
-        new_student = Student(name=name, 
-        email=email,age=age,grade=grade)
-        new_student.insert()
-        return jsonify({
-            'success': True,
-            'Appointment': new_student.format()
-        })
-    except:
-        abort(422)
-
-
 #  It should require the 'post:create_appointment' permission
 @app.route("/appointments/create/<int:student_id>", methods=['POST'])
 @requires_auth('post:create_appointment')
@@ -233,7 +185,7 @@ def create_appointment(student_id,payload):
                 })
             except:
                 abort(422)
-
+                
 # -------------------- PATCH Requests --------------------
 #  It should require the 'patch:update_appointment' permission
 @app.route("/appointments/edit/<int:appointment_id>", methods=['PATCH'])

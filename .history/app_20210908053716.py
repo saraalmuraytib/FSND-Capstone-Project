@@ -235,5 +235,6 @@ def delete_appointment(appointment_id):
         except:
             abort(422)
 
+
 if __name__ == '__main__':
     app.run()

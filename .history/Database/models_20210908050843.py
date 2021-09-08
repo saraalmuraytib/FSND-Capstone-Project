@@ -36,15 +36,6 @@ class Subject(db.Model):
 
     def __repr__(self):
         return f'<Subject ID: {self.id}, Subject Name:{self.name}>'
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-    def update(self):
-        db.session.commit()
 #----------------------------------------------------------------------------#
 class Tutor(db.Model):
     __tablename__ = 'tutor'
@@ -78,7 +69,6 @@ class Tutor(db.Model):
             'Introduction': self.intro,
             'Available Time': [available for available in self.availableTime]
         }
-
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -107,7 +97,6 @@ class Appointments(db.Model):
             'Duration': self.duration,
             'confirmation': self.confirmation
         }
-        
     def insert(self):
         db.session.add(self)
         db.session.commit()

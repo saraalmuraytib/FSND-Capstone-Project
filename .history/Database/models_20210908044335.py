@@ -36,15 +36,6 @@ class Subject(db.Model):
 
     def __repr__(self):
         return f'<Subject ID: {self.id}, Subject Name:{self.name}>'
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-    def update(self):
-        db.session.commit()
 #----------------------------------------------------------------------------#
 class Tutor(db.Model):
     __tablename__ = 'tutor'
@@ -78,15 +69,6 @@ class Tutor(db.Model):
             'Introduction': self.intro,
             'Available Time': [available for available in self.availableTime]
         }
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-    def update(self):
-        db.session.commit()
 #----------------------------------------------------------------------------#
 
 class Appointments(db.Model):
@@ -95,7 +77,7 @@ class Appointments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time= db.Column(db.DateTime, nullable=False)
     duration=db.Column(db.Integer)
-    confirmation = db.Column(db.Boolean)
+    confirmation = db.Column(db.Boolean,default="Not Confirmed", nullable=True)
     #----------------------- Relationship -----------------------------------
     tutor_id = db.Column(db.Integer,db.ForeignKey('tutor.id'),nullable=False)
     student_id = db.Column(db.Integer,db.ForeignKey('student.id'),nullable=False)
@@ -107,13 +89,6 @@ class Appointments(db.Model):
             'Duration': self.duration,
             'confirmation': self.confirmation
         }
-        
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
     def update(self):
         db.session.commit()
 
@@ -139,14 +114,8 @@ class Student(db.Model):
     @property
     def num_upcoming_appointments(self):
       return len(self.upcoming_appointments)
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-    def update(self):
-        db.session.commit()
+
+
 
 
     

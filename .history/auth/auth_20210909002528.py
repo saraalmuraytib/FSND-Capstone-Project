@@ -7,7 +7,7 @@ from urllib.request import urlopen
 
 AUTH0_DOMAIN = 'saramohammed.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'Virtual Tutor'
+API_AUDIENCE = 'VirtualTutor'
 
 ## AuthError Exception
 '''

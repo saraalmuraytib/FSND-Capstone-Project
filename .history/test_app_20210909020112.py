@@ -57,9 +57,9 @@ class VirtualTutorTestCase(unittest.TestCase):
         Endpoints:
         - Get:
         ✓ get_subjects -> Public
-        ✓ get_tutors_based_on_subject -> Public
-        ✓ get_appointments_tutor
-        ✓ get_appointments_student
+        - get_tutors_based_on_subject -> Public
+        - get_appointments_tutor
+        - get_appointments_student
         - Post:
         ✓ create_tutor
         ✓ create_student
@@ -154,53 +154,6 @@ class VirtualTutorTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-
-    #----------------- Get Test --------------------
-    def test_get_subjects(self):
-        res = self.client.get('/subjects')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-    
-    def test_404_get_tutors_based_on_subject(self):
-        res = self.client.get('/subjects/100/tutors')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
-
-    def test_get_tutors_based_on_subject(self):
-        res = self.client.get('/subjects/1/tutors')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-
-    def test_public_get_appointments_tutor(self):
-        res = self.client.post('/tutor/1/appointments')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-
-    def test_tutor_get_appointments_tutor(self): 
-        self.headers.update({'Authorization': 'Bearer ' + TUTOR_TOKEN})
-        res = self.client.post('/tutor/1/appointments',headers=self.headers)
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-
-    def test_public_get_appointments_student(self):
-        res = self.client.post('/student/1/appointments')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['success'], False)
-
-    def test_tutor_get_appointments_student(self): 
-        self.headers.update({'Authorization': 'Bearer ' + STUDENT_TOKEN})
-        res = self.client.post('/student/1/appointments',headers=self.headers)
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-
     #----------------- Delete Test --------------------
     def test_401_delete_appointment(self):
         
@@ -213,6 +166,28 @@ class VirtualTutorTestCase(unittest.TestCase):
         
         self.headers.update({'Authorization': 'Bearer ' + TUTOR_TOKEN})
         res = self.client.post('/appointments/delete/1',headers=self.headers)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    #----------------- Patch Test --------------------
+    def test_get_subjects(self):
+        res = self.client.get('/subjects')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+    
+
+    def test_public_get_appointments_tutor(self):
+        res = self.client.post('/tutor/1/appointments')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+
+    def test_tutor_get_appointments_tutor(self): 
+        self.headers.update({'Authorization': 'Bearer ' + TUTOR_TOKEN})
+        res = self.client.post('/tutor/1/appointments',headers=self.headers)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)

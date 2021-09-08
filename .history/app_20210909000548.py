@@ -22,7 +22,7 @@ from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
-
+from jose import jwt
 
 # ------------------------
 from Database.models import *
@@ -84,7 +84,7 @@ def create_app(test_config=None):
   #  It should require the 'get:appointments_tutor' permission
   @app.route('/tutor/<int:tutor_id>/appointments', methods=['GET'])
   @requires_auth('get:appointments_tutor')
-  def get_appointments_tutor(payload,tutor_id):
+  def get_appointments_tutor(tutor_id,payload):
       tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
 
       if tutor is None:
@@ -120,7 +120,7 @@ def create_app(test_config=None):
   #  It should require the 'get:appointments_student' permission
   @app.route('/student/<int:student_id>/appointments', methods=['GET'])
   @requires_auth('get:appointments_student')
-  def get_appointments_student(payload,student_id):
+  def get_appointments_student(student_id,payload):
       student = Student.query.filter(Student.id == student_id).one_or_none()
 
       if student is None:
@@ -157,7 +157,7 @@ def create_app(test_config=None):
   #  It should require the 'post:create_tutor' permission
   @app.route('/tutor', methods=['POST'])
   @requires_auth('post:create_tutor')
-  def create_tutor(payload):
+  def create_tutor():
       body = request.get_json()
       name = body.get('name')
       intro = body.get('intro')
@@ -204,7 +204,7 @@ def create_app(test_config=None):
   #  It should require the 'post:create_appointment' permission
   @app.route("/appointments/create/<int:student_id>", methods=['POST'])
   @requires_auth('post:create_appointment')
-  def create_appointment(payload,student_id):
+  def create_appointment(student_id,payload):
       student = Student.query.filter(Student.id == student_id).one_or_none()
       if student is None:
           abort(404)
@@ -241,7 +241,7 @@ def create_app(test_config=None):
   #  It should require the 'patch:update_appointment' permission
   @app.route("/appointments/edit/<int:appointment_id>", methods=['PATCH'])
   @requires_auth('patch:update_appointment')
-  def update_appointment(payload,appointment_id):
+  def update_appointment(appointment_id,payload):
       appointment = Appointments.query.filter(
           Appointments.id == appointment_id).one_or_none()
       if appointment is None:
@@ -263,7 +263,7 @@ def create_app(test_config=None):
   #  It should require the 'delete:delete_appointment' permission
   @app.route("/appointments/delete/<int:appointment_id>", methods=['DELETE'])
   @requires_auth('delete:delete_appointment')
-  def delete_appointment(payload,appointment_id):
+  def delete_appointment(appointment_id,payload):
       appointment = Appointments.query.filter(Appointments.id == appointment_id).one_or_none()
       if appointment is None:
           abort(404)

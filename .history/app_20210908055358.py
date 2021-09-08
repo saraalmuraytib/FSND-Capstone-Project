@@ -1,16 +1,16 @@
 '''
 * General Specifications *
 ** Models will include at least…
-  ✓ Two classes with primary keys at at least two attributes each 
-  ✓ [Optional but encouraged] One-to-many or many-to-many relationships between classes
+  * Two classes with primary keys at at least two attributes each
+  * [Optional but encouraged] One-to-many or many-to-many relationships between classes
 ** Endpoints will include at least…
-  ✓ Two GET requests 
-  ✓ One POST request 
-  ✓ One PATCH request
-  ✓ One DELETE request
+  * Two GET requests --> Get Subjects, Get Tutors based on selected Subject
+  * One POST request --> 
+  * One PATCH request --> 
+  * One DELETE request --> 
 ** Roles will include at least…
-  ✓ Two roles with different permissions 
-  * Permissions specified for all endpoints 
+  * Two roles with different permissions --> 
+  * Permissions specified for all endpoints
 ** Tests will include at least….
   * One test for success behavior of each endpoint
   * One test for error behavior of each endpoint
@@ -25,7 +25,8 @@ from datetime import datetime
 
 # ------------------------
 from Database.models import *
-from auth.auth import AuthError, requires_auth
+from .auth.auth import AuthError, requires_auth
+
 # create and configure the app
 app = Flask(__name__)
 CORS(app)
@@ -47,7 +48,14 @@ Migrate(app, db)
 def index():
     return '<h1>Welcome to Virtual Tutor</h1>'
 
-#  It should be a public endpoint
+
+'''
+    GET /subject
+        it should be a public endpoint
+    returns status code 200 and json {"success": True, "subjects": subjects } 
+'''
+
+
 @app.route('/subjects')
 def get_subjects():
     subjects = Subject.query.all()
@@ -60,7 +68,13 @@ def get_subjects():
         'Subjects': {subject.id: subject.name for subject in subjects}
     })
 
-#  It should be a public endpoint
+
+'''
+  GET /subjects/<int:subject_id>/tutors 
+    it should get tutors based on subject. 
+  '''
+
+
 @app.route('/subjects/<int:subject_id>/tutors', methods=['GET'])
 def get_tutors_based_on_subject(subject_id):
     subject = Subject.query.filter(Subject.id == subject_id).one_or_none()
@@ -77,10 +91,9 @@ def get_tutors_based_on_subject(subject_id):
             'Subject': subject.name
         })
 
-#  It should require the 'get:appointments_tutor' permission
+
 @app.route('/tutor/<int:tutor_id>/appointments', methods=['GET'])
-@requires_auth('get:appointments_tutor')
-def get_appointments_tutor(tutor_id,payload):
+def get_appointments_tutor(tutor_id):
     tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
 
     if tutor is None:
@@ -113,10 +126,9 @@ def get_appointments_tutor(tutor_id,payload):
                 'Upcoming Appointments': upcoming_appointments
             })
 
-#  It should require the 'get:appointments_student' permission
+
 @app.route('/student/<int:student_id>/appointments', methods=['GET'])
-@requires_auth('get:appointments_student')
-def get_appointments_student(student_id,payload):
+def get_appointments_student(student_id):
     student = Student.query.filter(Student.id == student_id).one_or_none()
 
     if student is None:
@@ -150,10 +162,10 @@ def get_appointments_student(student_id,payload):
             })
 
 # -------------------- POST Requests ---------------------
-#  It should require the 'post:create_appointment' permission
+
+
 @app.route("/appointments/create/<int:student_id>", methods=['POST'])
-@requires_auth('post:create_appointment')
-def create_appointment(student_id,payload):
+def create_appointment(student_id):
     student = Student.query.filter(Student.id == student_id).one_or_none()
     if student is None:
         abort(404)
@@ -186,10 +198,10 @@ def create_appointment(student_id,payload):
             except:
                 abort(422)
 # -------------------- PATCH Requests --------------------
-#  It should require the 'patch:update_appointment' permission
+
+
 @app.route("/appointments/edit/<int:appointment_id>", methods=['PATCH'])
-@requires_auth('patch:update_appointment')
-def update_appointment(appointment_id,payload):
+def update_appointment(appointment_id):
     appointment = Appointments.query.filter(
         Appointments.id == appointment_id).one_or_none()
     if appointment is None:
@@ -208,10 +220,9 @@ def update_appointment(appointment_id,payload):
             abort(422)
 
 # -------------------- DELETE Requests --------------------
-#  It should require the 'delete:delete_appointment' permission
+
 @app.route("/appointments/delete/<int:appointment_id>", methods=['DELETE'])
-@requires_auth('delete:delete_appointment')
-def delete_appointment(appointment_id,payload):
+def delete_appointment(appointment_id):
     appointment = Appointments.query.filter(Appointments.id == appointment_id).one_or_none()
     if appointment is None:
         abort(404)
@@ -224,44 +235,6 @@ def delete_appointment(appointment_id,payload):
             })
         except:
             abort(422)
-
-# -------------------- Error Handling --------------------
-'''
-Error handling for unprocessable entity
-'''
-@app.errorhandler(422)
-def unprocessable(error):
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable"
-    }), 422
-
-
-'''
-Error handler for 404
-    error handler should conform to general task above
-'''
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({
-        "success": False,
-        "error": 404,
-        "message": "resource not found"
-    }), 404
-
-'''
-Error handler for AuthError
-    error handler should conform to general task above
-'''
-@app.errorhandler(AuthError)
-def handle_auth_error(error):
-    return jsonify({
-        "success": False,
-        "error": error.status_code,
-        'message': error.error
-    }), 401
-
 
 if __name__ == '__main__':
     app.run()

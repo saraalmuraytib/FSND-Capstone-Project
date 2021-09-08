@@ -225,6 +225,8 @@ def delete_appointment(appointment_id,payload):
         except:
             abort(422)
 
+#------------------------- Tests -------------------------
+
 # -------------------- Error Handling --------------------
 '''
 Error handling for unprocessable entity

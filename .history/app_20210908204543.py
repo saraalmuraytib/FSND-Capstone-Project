@@ -210,8 +210,7 @@ def update_appointment(appointment_id,payload):
 # -------------------- DELETE Requests --------------------
 #  It should require the 'delete:delete_appointment' permission
 @app.route("/appointments/delete/<int:appointment_id>", methods=['DELETE'])
-@requires_auth('delete:delete_appointment')
-def delete_appointment(appointment_id,payload):
+def delete_appointment(appointment_id):
     appointment = Appointments.query.filter(Appointments.id == appointment_id).one_or_none()
     if appointment is None:
         abort(404)
@@ -224,6 +223,8 @@ def delete_appointment(appointment_id,payload):
             })
         except:
             abort(422)
+
+#------------------------- Tests -------------------------
 
 # -------------------- Error Handling --------------------
 '''

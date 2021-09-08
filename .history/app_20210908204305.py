@@ -79,8 +79,7 @@ def get_tutors_based_on_subject(subject_id):
 
 #  It should require the 'get:appointments_tutor' permission
 @app.route('/tutor/<int:tutor_id>/appointments', methods=['GET'])
-@requires_auth('get:appointments_tutor')
-def get_appointments_tutor(tutor_id,payload):
+def get_appointments_tutor(tutor_id):
     tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
 
     if tutor is None:
@@ -115,8 +114,7 @@ def get_appointments_tutor(tutor_id,payload):
 
 #  It should require the 'get:appointments_student' permission
 @app.route('/student/<int:student_id>/appointments', methods=['GET'])
-@requires_auth('get:appointments_student')
-def get_appointments_student(student_id,payload):
+def get_appointments_student(student_id):
     student = Student.query.filter(Student.id == student_id).one_or_none()
 
     if student is None:
@@ -152,8 +150,7 @@ def get_appointments_student(student_id,payload):
 # -------------------- POST Requests ---------------------
 #  It should require the 'post:create_appointment' permission
 @app.route("/appointments/create/<int:student_id>", methods=['POST'])
-@requires_auth('post:create_appointment')
-def create_appointment(student_id,payload):
+def create_appointment(student_id):
     student = Student.query.filter(Student.id == student_id).one_or_none()
     if student is None:
         abort(404)
@@ -188,8 +185,7 @@ def create_appointment(student_id,payload):
 # -------------------- PATCH Requests --------------------
 #  It should require the 'patch:update_appointment' permission
 @app.route("/appointments/edit/<int:appointment_id>", methods=['PATCH'])
-@requires_auth('patch:update_appointment')
-def update_appointment(appointment_id,payload):
+def update_appointment(appointment_id):
     appointment = Appointments.query.filter(
         Appointments.id == appointment_id).one_or_none()
     if appointment is None:
@@ -208,10 +204,9 @@ def update_appointment(appointment_id,payload):
             abort(422)
 
 # -------------------- DELETE Requests --------------------
-#  It should require the 'delete:delete_appointment' permission
+
 @app.route("/appointments/delete/<int:appointment_id>", methods=['DELETE'])
-@requires_auth('delete:delete_appointment')
-def delete_appointment(appointment_id,payload):
+def delete_appointment(appointment_id):
     appointment = Appointments.query.filter(Appointments.id == appointment_id).one_or_none()
     if appointment is None:
         abort(404)
@@ -224,6 +219,8 @@ def delete_appointment(appointment_id,payload):
             })
         except:
             abort(422)
+
+#------------------------- Tests -------------------------
 
 # -------------------- Error Handling --------------------
 '''

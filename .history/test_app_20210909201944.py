@@ -125,7 +125,7 @@ class VirtualTutorTestCase(unittest.TestCase):
             availableTime= ["2021-09-10 13:00:00", "2021-09-11 13:00:00"])
         tutor.insert()    
         tutor_id=tutor.id
-
+        
         new_appointment = {
             "start_time": "12/09/21 08:00:00",
             "duration": 45,
@@ -243,7 +243,7 @@ class VirtualTutorTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-
+'''
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()

@@ -98,8 +98,8 @@ class VirtualTutorTestCase(unittest.TestCase):
     def test_manager_create_tutor(self):
         new_tutor = {
             "name": "Rahaf",
-            "intro": "I Love Teaching Science",
-            "subject_id": 1,
+            "intro": "'I Love Teaching Science",
+            "subject_id": 2,
             "availableTime": ["2021-09-10 13:00:00", "2021-09-11 13:00:00"]
         }
         self.headers.update({'Authorization': 'Bearer ' + MANAGER_TOKEN})

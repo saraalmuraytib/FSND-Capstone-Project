@@ -240,8 +240,8 @@ def create_app(test_config=None):
   # -------------------- PATCH Requests --------------------
   #  It should require the 'patch:update_appointment' permission
   @app.route("/appointments/edit/<int:appointment_id>", methods=['PATCH'])
-  @requires_auth('patch:update_appointment')
-  def update_appointment(payload,appointment_id):
+  #@requires_auth('patch:update_appointment')
+  def update_appointment(appointment_id):
       appointment = Appointments.query.filter(
           Appointments.id == appointment_id).one_or_none()
       if appointment is None:
@@ -272,7 +272,7 @@ def create_app(test_config=None):
               appointment.delete()
               return jsonify({
                   'success': True,
-                  'deleted id': appointment_id
+                  'delete': appointment_id
               })
           except:
               abort(422)

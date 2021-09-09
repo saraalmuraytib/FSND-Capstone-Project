@@ -156,8 +156,8 @@ def create_app(test_config=None):
   # -------------------- POST Requests ---------------------
   #  It should require the 'post:create_tutor' permission
   @app.route('/tutor', methods=['POST'])
-  @requires_auth('post:create_tutor')
-  def create_tutor(payload):
+  #@requires_auth('post:create_tutor')
+  def create_tutor():
       body = request.get_json()
       name = body.get('name')
       intro = body.get('intro')
@@ -175,7 +175,7 @@ def create_app(test_config=None):
           new_tutor.insert()
           return jsonify({
               'success': True,
-              'Tutor': new_tutor.format()
+              'Appointment': new_tutor.format()
           })
         except:
           abort(422)
@@ -196,13 +196,13 @@ def create_app(test_config=None):
           new_student.insert()
           return jsonify({
               'success': True,
-              'Student': new_student.format()
+              'Appointment': new_student.format()
           })
       except:
           abort(422)
 
   #  It should require the 'post:create_appointment' permission
-  @app.route("/student/<int:student_id>/appointments/create", methods=['POST'])
+  @app.route("/appointments/create/<int:student_id>", methods=['POST'])
   @requires_auth('post:create_appointment')
   def create_appointment(payload,student_id):
       student = Student.query.filter(Student.id == student_id).one_or_none()
@@ -272,7 +272,7 @@ def create_app(test_config=None):
               appointment.delete()
               return jsonify({
                   'success': True,
-                  'deleted id': appointment_id
+                  'delete': appointment_id
               })
           except:
               abort(422)

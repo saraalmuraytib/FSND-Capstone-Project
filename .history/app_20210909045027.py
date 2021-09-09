@@ -83,8 +83,8 @@ def create_app(test_config=None):
 
   #  It should require the 'get:appointments_tutor' permission
   @app.route('/tutor/<int:tutor_id>/appointments', methods=['GET'])
-  @requires_auth('get:appointments_tutor')
-  def get_appointments_tutor(payload,tutor_id):
+  #@requires_auth('get:appointments_tutor')
+  def get_appointments_tutor(tutor_id):
       tutor = Tutor.query.filter(Tutor.id == tutor_id).one_or_none()
 
       if tutor is None:
@@ -175,7 +175,7 @@ def create_app(test_config=None):
           new_tutor.insert()
           return jsonify({
               'success': True,
-              'Tutor': new_tutor.format()
+              'Appointment': new_tutor.format()
           })
         except:
           abort(422)
@@ -196,13 +196,13 @@ def create_app(test_config=None):
           new_student.insert()
           return jsonify({
               'success': True,
-              'Student': new_student.format()
+              'Appointment': new_student.format()
           })
       except:
           abort(422)
 
   #  It should require the 'post:create_appointment' permission
-  @app.route("/student/<int:student_id>/appointments/create", methods=['POST'])
+  @app.route("/appointments/create/<int:student_id>", methods=['POST'])
   @requires_auth('post:create_appointment')
   def create_appointment(payload,student_id):
       student = Student.query.filter(Student.id == student_id).one_or_none()
@@ -272,7 +272,7 @@ def create_app(test_config=None):
               appointment.delete()
               return jsonify({
                   'success': True,
-                  'deleted id': appointment_id
+                  'delete': appointment_id
               })
           except:
               abort(422)

@@ -90,16 +90,16 @@ class VirtualTutorTestCase(unittest.TestCase):
             "availableTime": ["2021-09-10 13:00:00", "2021-09-11 13:00:00"]
         }
 
-        res = self.client.post('/tutor', json=new_tutor)
+        res = self.client.post('/tutor', json=json.dumps(new_tutor))
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
-
+'''
     def test_manager_create_tutor(self):
         new_tutor = {
             "name": "Rahaf",
-            "intro": "I Love Teaching Science",
-            "subject_id": 1,
+            "intro": "'I Love Teaching Science",
+            "subject_id": 2,
             "availableTime": ["2021-09-10 13:00:00", "2021-09-11 13:00:00"]
         }
         self.headers.update({'Authorization': 'Bearer ' + MANAGER_TOKEN})
@@ -108,7 +108,7 @@ class VirtualTutorTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-'''
+
     def test_public_create_appointment(self):
         new_appointment = {
             "start_time": "12/09/21 08:00:00",

@@ -272,7 +272,7 @@ def create_app(test_config=None):
               appointment.delete()
               return jsonify({
                   'success': True,
-                  'deleted id': appointment_id
+                  'delete': appointment_id
               })
           except:
               abort(422)

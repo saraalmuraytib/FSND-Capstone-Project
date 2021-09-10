@@ -49,7 +49,7 @@ python test_app.py
 
 ## API Reference
 ### Getting Started
-- Base URL: At present this app can only be run locally and it hosted in Heroku. The local host at the default, [http://127.0.0.1:5000/](http://127.0.0.1:5000). The hosted version in Heroku is at [soon](soon)
+- Base URL: At present this app can only be run locally and it hosted in Heroku. The local host at the default, [http://127.0.0.1:5000/](http://127.0.0.1:5000). The hosted version in Heroku is at [here](https://capstonevirtualtutor.herokuapp.com/)
 - Authentication: This application requires authentication to perform various actions. Some of the endpoints require various permissions. Authentication and Authorization was implemented using [Auth0.com](Auth0.com).
 
 #### Role-Based Access Control (RBAC)

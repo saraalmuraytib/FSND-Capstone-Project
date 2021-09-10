@@ -58,6 +58,7 @@ def create_app(test_config=None):
   def post_subjects():
       body = request.get_json()
       name = body.get('name')
+
       try:
           new_subject = Subject(name=name)
           new_subject.insert()
